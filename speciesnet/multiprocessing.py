@@ -1490,12 +1490,14 @@ class SpeciesNet:
             admin1_region,
         )
         if run_mode == "multi_thread":
+            print("THREAD POOLS")
             return self._detect_using_thread_pools(
                 instances_dict,
                 progress_bars=progress_bars,
                 predictions_json=predictions_json,
             )
         elif run_mode == "multi_process":
+            print("PROCESS POOLS")
             return self._detect_using_process_pools(
                 instances_dict,
                 progress_bars=progress_bars,

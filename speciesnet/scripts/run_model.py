@@ -361,6 +361,12 @@ def main(argv: list[str]) -> None:
     run_mode = _RUN_MODE.value
     mp.set_start_method("spawn")
 
+    print("INFO:")
+    print(classifications_dict)
+    print(detections_dict)
+    print(_MODEL.value)
+    print(components)
+
     # Make predictions.
     model = SpeciesNet(
         _MODEL.value,
@@ -371,6 +377,7 @@ def main(argv: list[str]) -> None:
         # combine_predictions_fn=custom_combine_predictions_fn,
         multiprocessing=(run_mode == "multi_process"),
     )
+
     if hasattr(model, "classifier") and not hasattr(model, "detector"):
         if (
             model.classifier.model_info.type_ == "always_crop"
@@ -399,6 +406,10 @@ def main(argv: list[str]) -> None:
                 stop_message=f"Please drop the --{_DETECTIONS_JSON.name} flag.",
             ):
                 return
+
+    print("Batch:")
+    print(_BATCH_SIZE.value)
+
     if _CLASSIFIER_ONLY.value:
         predictions_dict = model.classify(
             instances_dict=instances_dict,
@@ -409,6 +420,12 @@ def main(argv: list[str]) -> None:
             predictions_json=_PREDICTIONS_JSON.value,
         )
     elif _DETECTOR_ONLY.value:
+        print("HERE")
+        print(model)
+        print(instances_dict)
+        print(run_mode)
+        print(_PROGRESS_BARS.value)
+        print(_PREDICTIONS_JSON.value)
         predictions_dict = model.detect(
             instances_dict=instances_dict,
             run_mode=run_mode,
